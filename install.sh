@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 PRODUCT="SCRIPT LATAM"
 VERSION="V2.5"
-AUTHOR="BY JOHAN ALFA PRO"
+AUTHOR="Dev JOHAN ALFA PRO"
 
 DISCOVERY_BASE="https://raw.githubusercontent.com/JohanAlfaDev/SCRIPT-LATAM/main"
 
@@ -22,12 +22,20 @@ fail() {
     exit 1
 }
 
-printf '%s\n' "=============================================="
-printf '%s\n' "               SCRIPT LATAM"
-printf '%s\n' "                   V2.5"
-printf '%s\n' "             BY JOHAN ALFA PRO"
-printf '%s\n' "=============================================="
-printf '%s\n' "Verificando canal seguro..."
+clear 2>/dev/null || true
+RED='\033[1;31m'
+WHITE='\033[1;37m'
+NC='\033[0m'
+
+printf "${RED}╔══════════════════════════════════════════════════════════╗${NC}\n"
+printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
+printf "${RED}║${NC}                       ${WHITE}SCRIPT LATAM${NC}                       ${RED}║${NC}\n"
+printf "${RED}║${NC}                          ${WHITE}V2.5${NC}                            ${RED}║${NC}\n"
+printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
+printf "${RED}║${NC}                    ${WHITE}Dev JOHAN ALFA PRO${NC}                    ${RED}║${NC}\n"
+printf "${RED}║${NC}                                                          ${RED}║${NC}\n"
+printf "${RED}╚══════════════════════════════════════════════════════════╝${NC}\n"
+sleep 4
 
 command -v curl >/dev/null 2>&1 ||
     fail "curl no esta instalado"
@@ -90,8 +98,6 @@ PY
 [[ -n "$BACKEND" ]] ||
     fail "backend vacio"
 
-printf '%s\n' "✅ Canal verificado"
-printf '%s\n' "Conectando al servidor LATAM..."
 
 curl -4 -fsSL     --connect-timeout 10     --max-time 30     "${BACKEND}/install.sh"     -o "$TMP/installer.sh" ||
     fail "no se pudo obtener el instalador"
@@ -109,8 +115,6 @@ bash -n "$TMP/installer.sh" ||
 
 chmod 700 "$TMP/installer.sh"
 
-printf '%s\n' "✅ Instalador verificado"
-printf '%s\n' "Iniciando SCRIPT LATAM..."
-printf '\n'
 
+clear 2>/dev/null || true
 exec /bin/bash "$TMP/installer.sh" "$@"
